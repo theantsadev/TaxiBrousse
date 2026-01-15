@@ -1,6 +1,6 @@
--- Insertion des données de test
+-- Insertion des donnees de test
 
--- Gares routières
+-- Gares routieres
 INSERT INTO gare_routiere (nom, ville, adresse, telephone) VALUES
 ('Gare Centrale Fasankarana', 'Fasankarana', '123 Rue Principale', '032 12 34 56'),
 ('Gare Ambolomadinika', 'Ambolomadinika', '456 Avenue Centrale', '032 23 45 67'),
@@ -51,16 +51,16 @@ INSERT INTO client (nom, prenom, contact) VALUES
 ('Ratsimilaho', 'Sophie', '032 45 678 90'),
 ('Rajohnson', 'Marc', '032 56 789 01');
 
--- Réservations (quelques exemples)
+-- Reservations (quelques exemples)
 INSERT INTO reservation (id_client, id_voyage, nombre_places_reservees, date_reservation, montant_total, statut) VALUES
 (1, 1, 2, '2026-01-10', 50000, 'en_attente_paiement'),
-(2, 2, 1, '2026-01-11', 25000, 'confirmé'),
+(2, 2, 1, '2026-01-11', 25000, 'confirme'),
 (3, 3, 3, '2026-01-11', 90000, 'en_attente_paiement'),
-(4, 5, 2, '2026-01-12', 50000, 'confirmé'),
-(5, 6, 1, '2026-01-12', 20000, 'confirmé');
+(4, 5, 2, '2026-01-12', 50000, 'confirme'),
+(5, 6, 1, '2026-01-12', 20000, 'confirme');
 
 -- Paiements
 INSERT INTO paiement (id_reservation, montant, mode_paiement, date_paiement, reference_transaction) VALUES
-(2, 25000, 'Espèces', '2026-01-11', 'PAY-20260111-001'),
+(2, 25000, 'Especes', '2026-01-11', 'PAY-20260111-001'),
 (4, 50000, 'Carte bancaire', '2026-01-12', 'PAY-20260112-002'),
-(5, 20000, 'Espèces', '2026-01-12', 'PAY-20260112-003');
+(5, 20000, 'Especes', '2026-01-12', 'PAY-20260112-003');
