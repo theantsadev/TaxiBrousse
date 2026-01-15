@@ -1,0 +1,25 @@
+<!-- Sidebar Navigation -->
+<aside th:fragment="sidebar(activeMenu)" class="d-flex flex-column p-3 bg-white" style="width: 250px; height: calc(100vh - 56px);">
+    <nav class="nav flex-column">
+        <a th:href="@{/dashboard}" 
+           class="nav-link ps-3 py-2"
+           th:classappend="${activeMenu == 'dashboard' ? 'active fw-bold text-primary' : 'text-dark'}">
+            <i class="fas fa-home me-2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a th:href="@{/users}" 
+           class="nav-link ps-3 py-2"
+           th:classappend="${activeMenu == 'users' ? 'active fw-bold text-primary' : 'text-dark'}">
+            <i class="fas fa-users me-2"></i>
+            <span>Users</span>
+        </a>
+
+        <a th:href="@{/settings}" 
+           class="nav-link ps-3 py-2"
+           th:classappend="${activeMenu == 'settings' ? 'active fw-bold text-primary' : 'text-dark'}">
+            <i class="fas fa-cog me-2"></i>
+            <span>Settings</span>
+        </a>
+    </nav>
+</aside>

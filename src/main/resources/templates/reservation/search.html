@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Réserver un voyage - Taxi Brousse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container-search {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 600px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .voyage-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .voyage-card:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .error-alert {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="container-search mx-auto">
+            <div class="header-title">
+                <h1><i class="fas fa-bus"></i> Réserver un voyage</h1>
+                <p class="text-muted mt-2">Trouvez et réservez votre trajet facilement</p>
+            </div>
+
+            <div th:if="${erreur}" class="error-alert">
+                <i class="fas fa-exclamation-circle"></i> <span th:text="${erreur}"></span>
+            </div>
+
+            <form method="GET" action="#" id="searchForm">
+                <div class="form-group mb-4">
+                    <label for="gareDepart"><i class="fas fa-map-marker-alt"></i> Gare de départ</label>
+                    <select class="form-select form-control-lg" id="gareDepart" required>
+                        <option value="">-- Sélectionnez une gare --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="gareArrivee"><i class="fas fa-location-dot"></i> Gare d'arrivée</label>
+                    <select class="form-select form-control-lg" id="gareArrivee" required>
+                        <option value="">-- Sélectionnez une gare --</option>
+                    </select>
+                </div>
+
+                <button type="button" onclick="rechercherVoyages()" class="btn btn-search w-100 text-white">
+                    <i class="fas fa-search"></i> Rechercher les voyages
+                </button>
+            </form>
+
+            <!-- Résultats des voyages -->
+            <div id="resultatsSection" style="display:none;" class="mt-5">
+                <div id="datesSection"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let voyagesData = [];
+        let voyagesByDate = {}; // Stockage des voyages par date
+
+        // Charger les voyages disponibles au démarrage
+        window.addEventListener('load', function () {
+            const voyages = JSON.parse(document.getElementById('voyagesJson').textContent);
+            voyagesData = voyages;
+            populateGares();
+        });
+
+        function populateGares() {
+            const gareDepart = document.getElementById('gareDepart');
+            const gareArrivee = document.getElementById('gareArrivee');
+
+            // Construire un ensemble combiné (départ + arrivée) et l'utiliser pour les deux sélecteurs
+            const combined = [...new Set(voyagesData.flatMap(v => [
+                v.gare_depart_nom + '|' + v.gare_depart_ville,
+                v.gare_arrivee_nom + '|' + v.gare_arrivee_ville
+            ]))];
+
+            // Optionnel : trier par nom de gare puis ville
+            combined.sort((a, b) => {
+                const [na, va] = a.split('|');
+                const [nb, vb] = b.split('|');
+                const cmp = na.localeCompare(nb, 'fr');
+                return cmp !== 0 ? cmp : va.localeCompare(vb, 'fr');
+            });
+
+            combined.forEach(gare => {
+                const [nom, ville] = gare.split('|');
+                const option = `<option value="${nom}">${nom} (${ville})</option>`;
+                gareDepart.innerHTML += option;
+                gareArrivee.innerHTML += option;
+            });
+        }
+
+        function rechercherVoyages() {
+            const gareDepart = document.getElementById('gareDepart').value;
+            const gareArrivee = document.getElementById('gareArrivee').value;
+
+            if (!gareDepart || !gareArrivee) {
+                alert('Veuillez sélectionner une gare de départ et d\'arrivée');
+                return;
+            }
+
+            const voyagesFiltres = voyagesData.filter(v =>
+                v.gare_depart_nom === gareDepart &&
+                v.gare_arrivee_nom === gareArrivee
+            );
+
+            if (voyagesFiltres.length === 0) {
+                alert('Aucun voyage disponible pour cette route');
+                return;
+            }
+
+            // Grouper par date
+            const dateMap = {};
+            voyagesFiltres.forEach(v => {
+                const date = v.date_depart;
+                if (!dateMap[date]) {
+                    dateMap[date] = [];
+                }
+                dateMap[date].push(v);
+            });
+
+            // Afficher les dates
+            const datesSection = document.getElementById('datesSection');
+            datesSection.innerHTML = `<h4 class="mb-4">${gareDepart} → ${gareArrivee}</h4>`;
+
+            Object.keys(dateMap).sort().forEach(date => {
+                voyagesByDate[date] = dateMap[date]; // Stocker les voyages par date
+                const dateObj = new Date(date);
+                const formattedDate = dateObj.toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                datesSection.innerHTML += `
+                    <div class="voyage-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1"><i class="fas fa-calendar"></i> ${formattedDate}</h5>
+                                <p class="text-muted mb-0">${dateMap[date].length} voyage(s) disponible(s)</p>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary" 
+                                    onclick="afficherHoraires('${date}')">
+                                <i class="fas fa-arrow-right"></i> Choisir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('resultatsSection').style.display = 'block';
+        }
+
+        function afficherHoraires(date) {
+            const voyages = voyagesByDate[date];
+            if (!voyages || voyages.length === 0) {
+                alert('Aucun voyage trouvé pour cette date');
+                return;
+            }
+
+            const datesSection = document.getElementById('datesSection');
+            datesSection.innerHTML = `<h4 class="mb-4">Horaires disponibles le ${new Date(date).toLocaleDateString('fr-FR')}</h4>`;
+
+            voyages.forEach(v => {
+                datesSection.innerHTML += `
+                    <div class="voyage-card">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <p class="mb-1"><strong><i class="fas fa-clock"></i> ${v.heure_depart}</strong></p>
+                                <p class="text-muted mb-1">🚐 ${v.nom_voiture} (${v.type_voiture})</p>
+                                <p class="mb-0">💺 Places disponibles: <span class="badge bg-success">${v.places_disponibles}/${v.capacite}</span></p>
+                            </div>
+                            <div class="col-md-5 text-end">
+                                <p class="mb-2"><strong>💰 ${v.tarif.toLocaleString('fr-MG')} Ar</strong></p>
+                                <button type="button" class="btn btn-sm btn-primary" 
+                                        onclick="afficherFormulaire(${v.id_voyage}, '${v.nom_voiture}', ${v.tarif}, ${v.places_disponibles})">
+                                    <i class="fas fa-check-circle"></i> Réserver
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function afficherFormulaire(id_voyage, nomVoiture, tarif, placesMax) {
+            const html = `
+                <div class="container-search">
+                    <div class="header-title">
+                        <h1><i class="fas fa-form"></i> Finaliser la réservation</h1>
+                    </div>
+                    <form method="POST" action="/app/reservation/confirmer">
+                        <div class="form-group mb-3">
+                            <label>Voiture: <strong>${nomVoiture}</strong></label>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Tarif unitaire: <strong>${tarif.toLocaleString('fr-MG')} Ar</strong></label>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="nom">Nom *</label>
+                            <input type="text" class="form-control" id="nom" name="nom" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="prenom">Prénom *</label>
+                            <input type="text" class="form-control" id="prenom" name="prenom" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="contact">Contact *</label>
+                            <input type="tel" class="form-control" id="contact" name="contact" placeholder="032 XX XXX XX" required>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="nombre_places">Nombre de places *</label>
+                            <select class="form-select" id="nombre_places" name="nombre_places" onchange="calculerMontant(${tarif})" required>
+                                <option value="">-- Sélectionnez --</option>
+                                ${Array.from({ length: placesMax }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label>Montant total:</label>
+                            <h4 id="montantTotal" class="text-primary">0 Ar</h4>
+                        </div>
+                        
+                        <input type="hidden" name="id_voyage" value="${id_voyage}">
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check"></i> Confirmer la réservation
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="location.reload()">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.querySelector('.container-search').innerHTML = html;
+        }
+
+        function calculerMontant(tarif) {
+            const nombre = parseInt(document.getElementById('nombre_places').value) || 0;
+            const montant = nombre * tarif;
+            document.getElementById('montantTotal').textContent = montant.toLocaleString('fr-MG') + ' Ar';
+        }
+    </script>
+
+    <!-- Données JSON des voyages -->
+    <script type="application/json" id="voyagesJson">
+        [
+            <span th:each="voyage, stat : ${voyages}" th:remove="tag">{
+                    "id_voyage": <span th:text="${voyage.id_voyage}" th:remove="tag"/>,
+                    "gare_depart_nom": "<span th:text="${voyage.gare_depart_nom}" th:remove="tag"/>",
+                    "gare_depart_ville": "<span th:text="${voyage.gare_depart_ville}" th:remove="tag"/>",
+                    "gare_arrivee_nom": "<span th:text="${voyage.gare_arrivee_nom}" th:remove="tag"/>",
+                    "gare_arrivee_ville": "<span th:text="${voyage.gare_arrivee_ville}" th:remove="tag"/>",
+                    "date_depart": "<span th:text="${voyage.date_depart}" th:remove="tag"/>",
+                    "heure_depart": "<span th:text="${#temporals.format(voyage.heure_depart, 'HH:mm')}" th:remove="tag"/>",
+                    "nom_voiture": "<span th:text="${voyage.nom_voiture}" th:remove="tag"/>",
+                    "type_voiture": "<span th:text="${voyage.type_voiture}" th:remove="tag"/>",
+                    "capacite": <span th:text="${voyage.capacite}" th:remove="tag"/>,
+                    "places_disponibles": <span th:text="${voyage.places_disponibles}" th:remove="tag"/>,
+                    "tarif": <span th:text="${voyage.tarif}" th:remove="tag"/>
+                }<span th:if="${!stat.last}" th:remove="tag">,</span>
+            </span>
+        ]
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
