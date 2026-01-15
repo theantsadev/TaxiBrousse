@@ -22,11 +22,11 @@ public class VoyageDetailDTO {
     private Double tarif;
     private String statut;
 
-    // Constructeur par défaut
+    // Constructeur par defaut
     public VoyageDetailDTO() {
     }
 
-    // Constructeur avec TOUS les paramètres dans l'ORDRE EXACT de la query
+    // Constructeur avec TOUS les parametres dans l'ORDRE EXACT de la query
     public VoyageDetailDTO(Integer id_voyage,
             String gare_depart_nom,
             String gare_depart_ville,

@@ -27,7 +27,7 @@ public class ReservationController {
 
     @GetMapping
     public String showSearchPage(Model model) {
-        // Écran 1: Sélection des gares
+        // Ecran 1: Selection des gares
         List<VoyageDetailDTO> voyages = voyageService.getAllVoyagesDispo();
         System.out.println(voyages.size());
         model.addAttribute("voyages", voyages);
@@ -44,17 +44,17 @@ public class ReservationController {
             Model model) {
 
         try {
-            // Vérifier les données
+            // Verifier les donnees
             Optional<Voyage> voyage = voyageService.getVoyageById(id_voyage);
             if (voyage.isEmpty()) {
                 model.addAttribute("erreur", "Voyage introuvable");
                 return showSearchPage(model);
             }
 
-            // Créer ou récupérer le client
+            // Creer ou recuperer le client
             Client client = clientService.creerOuRecupererClient(nom, prenom, contact);
 
-            // Vérifier la disponibilité
+            // Verifier la disponibilite
             if (!voyageService.verifierDisponibilite(id_voyage, nombre_places)) {
                 model.addAttribute("erreur", "Places insuffisantes");
                 return showSearchPage(model);
@@ -63,10 +63,10 @@ public class ReservationController {
             // Calculer le montant
             double montant = reservationService.calculerMontantTotal(voyage.get(), nombre_places);
 
-            // Créer la réservation
+            // Creer la reservation
             Reservation reservation = reservationService.creerReservation(client, voyage.get(), nombre_places, montant);
 
-            // Préparer les données pour la confirmation
+            // Preparer les donnees pour la confirmation
             model.addAttribute("reservation", reservation);
             model.addAttribute("voyage", voyage.get());
             model.addAttribute("client", client);
@@ -76,7 +76,7 @@ public class ReservationController {
 
             return "reservation/confirmation";
         } catch (Exception e) {
-            model.addAttribute("erreur", "Erreur lors de la réservation: " + e.getMessage());
+            model.addAttribute("erreur", "Erreur lors de la reservation: " + e.getMessage());
             return showSearchPage(model);
         }
     }
@@ -90,20 +90,20 @@ public class ReservationController {
         try {
             Optional<Reservation> reservation = reservationService.getReservationById(id_reservation);
             if (reservation.isEmpty()) {
-                model.addAttribute("erreur", "Réservation introuvable");
+                model.addAttribute("erreur", "Reservation introuvable");
                 return "redirect:/reservation";
             }
 
-            // Créer le paiement
+            // Creer le paiement
             String reference = "PAY-" + System.currentTimeMillis();
             Paiement paiement = paiementService.creerPaiement(
                     reservation.get(),
                     reservation.get().getMontant_total(),
-                    mode_paiement != null ? mode_paiement : "Espèces",
+                    mode_paiement != null ? mode_paiement : "Especes",
                     reference);
 
-            // Mettre à jour le statut de la réservation
-            reservation.get().setStatut("confirmé");
+            // Mettre a jour le statut de la reservation
+            reservation.get().setStatut("confirme");
             reservationService.saveReservation(reservation.get());
 
             model.addAttribute("paiement", paiement);
