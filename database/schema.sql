@@ -45,7 +45,7 @@ CREATE TABLE voyage (
     heure_depart TIME NOT NULL,
     id_voiture INTEGER NOT NULL REFERENCES voiture(id_voiture),
     tarif_voyage DOUBLE PRECISION,
-    statut VARCHAR(50) DEFAULT 'prévu'
+    statut VARCHAR(50) DEFAULT 'prevu'
 );
 
 -- Table Client
@@ -77,7 +77,7 @@ CREATE TABLE paiement (
     reference_transaction VARCHAR(100)
 );
 
--- Vues pour les requêtes fréquentes
+-- Vues pour les requêtes frequentes
 CREATE VIEW vue_voyage_detaille AS
 SELECT 
     v.id_voyage,
@@ -102,8 +102,8 @@ CREATE VIEW vue_places_disponibles AS
 SELECT 
     v.id_voyage,
     vo.capacite,
-    COALESCE(SUM(CASE WHEN r.statut != 'annulé' THEN r.nombre_places_reservees ELSE 0 END), 0) as places_reservees,
-    vo.capacite - COALESCE(SUM(CASE WHEN r.statut != 'annulé' THEN r.nombre_places_reservees ELSE 0 END), 0) as places_disponibles
+    COALESCE(SUM(CASE WHEN r.statut != 'annule' THEN r.nombre_places_reservees ELSE 0 END), 0) as places_reservees,
+    vo.capacite - COALESCE(SUM(CASE WHEN r.statut != 'annule' THEN r.nombre_places_reservees ELSE 0 END), 0) as places_disponibles
 FROM voyage v
 JOIN voiture vo ON v.id_voiture = vo.id_voiture
 LEFT JOIN reservation r ON r.id_voyage = v.id_voyage

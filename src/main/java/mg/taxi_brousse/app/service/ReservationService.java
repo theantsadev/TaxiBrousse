@@ -21,7 +21,7 @@ public class ReservationService {
 
     public Reservation creerReservation(Client client, Voyage voyage, int nb_places, double montant) {
         if (!voyageService.verifierDisponibilite(voyage.getId_voyage(), nb_places)) {
-            throw new RuntimeException("Places insuffisantes pour cette réservation");
+            throw new RuntimeException("Places insuffisantes pour cette reservation");
         }
         
         Reservation reservation = new Reservation(
@@ -42,7 +42,7 @@ public class ReservationService {
     public void annulerReservation(int id_reservation) {
         Optional<Reservation> reservation = reservationRepository.findById(id_reservation);
         if (reservation.isPresent()) {
-            reservation.get().setStatut("annulé");
+            reservation.get().setStatut("annule");
             reservationRepository.save(reservation.get());
         }
     }
