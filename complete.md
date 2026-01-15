@@ -1,29 +1,29 @@
-# 📝 UserFlow : Réservation de voyage
+﻿# 📝 UserFlow : Reservation de voyage
 
-**Fonctionnalité** : Un client achète des places pour Fasankarana → Ambolomadinika, le 14/01 à 14h
+**Fonctionnalite** : Un client achete des places pour Fasankarana → Ambolomadinika, le 14/01 a 14h
 
 ---
 
 ## 1️⃣ AFFICHAGE
 
-### **Écran 1 : Sélection des gares**
+### **Ecran 1 : Selection des gares**
 
 **Titre** : "Rechercher un voyage"
 
-**Éléments** :
-- Gare de départ : [Liste déroulante]
-- Gare d'arrivée : [Liste déroulante]
+**Elements** :
+- Gare de depart : [Liste deroulante]
+- Gare d'arrivee : [Liste deroulante]
 - Bouton [Rechercher]
 
 **Logique d'affichage** :
 1. Au chargement de la page :
-   - Appel métier : `VoyageService.getAllVoyagesDispo()` → List<VoyageDetailDTO>
-   - Stocker la liste complète en mémoire (JavaScript)
+   - Appel metier : `VoyageService.getAllVoyagesDispo()` → List<VoyageDetailDTO>
+   - Stocker la liste complete en memoire (JavaScript)
 
-2. Remplir les listes déroulantes :
-   - **Gare départ** : Projection unique sur `gare_depart_nom + gare_depart_ville`
-   - **Gare arrivée** : Projection unique sur `gare_arrivee_nom + gare_arrivee_ville`
-   - Éliminer les doublons
+2. Remplir les listes deroulantes :
+   - **Gare depart** : Projection unique sur `gare_depart_nom + gare_depart_ville`
+   - **Gare arrivee** : Projection unique sur `gare_arrivee_nom + gare_arrivee_ville`
+   - Eliminer les doublons
 
 3. Au clic sur [Rechercher] :
    - Filtrer la liste en JavaScript :
@@ -33,18 +33,18 @@
        v.gare_arrivee_nom == gareArrivee_selected
      )
      ```
-   - Passer à l'écran 2 avec cette liste filtrée
+   - Passer a l'ecran 2 avec cette liste filtree
 
-**Appel métier** :
+**Appel metier** :
 → `VoyageService.getAllVoyagesDispo()` : List<VoyageDetailDTO>
 
 ---
 
-### **Écran 2 : Sélection de la date**
+### **Ecran 2 : Selection de la date**
 
 **Titre** : "Fasankarana → Ambolomadinika - Choisir une date"
 
-**Éléments** :
+**Elements** :
 Liste des dates disponibles sous forme de boutons/cartes :
 
 ```
@@ -68,7 +68,7 @@ Liste des dates disponibles sous forme de boutons/cartes :
 ```
 
 **Logique d'affichage** :
-1. À partir de `voyagesFiltres` (liste de l'écran 1)
+1. A partir de `voyagesFiltres` (liste de l'ecran 1)
 2. Extraire les dates uniques :
    ```js
    datesUniques = [...new Set(
@@ -83,18 +83,18 @@ Liste des dates disponibles sous forme de boutons/cartes :
    ```
 4. Trier par date croissante
 5. Au clic sur [Choisir] :
-   - Filtrer par date sélectionnée
-   - Passer à l'écran 3
+   - Filtrer par date selectionnee
+   - Passer a l'ecran 3
 
-**Pas d'appel métier** (filtrage JavaScript côté client)
+**Pas d'appel metier** (filtrage JavaScript cote client)
 
 ---
 
-### **Écran 3 : Sélection de l'heure**
+### **Ecran 3 : Selection de l'heure**
 
 **Titre** : "Fasankarana → Ambolomadinika - 14 janvier 2026"
 
-**Éléments** :
+**Elements** :
 Liste des horaires disponibles :
 
 ```
@@ -103,7 +103,7 @@ Liste des horaires disponibles :
 │ 🚐 Voiture : Standard ABC              │
 │ 💺 Places disponibles : 10/12          │
 │ 💰 Tarif : 20 000 Ar                   │
-│              [Réserver]                │
+│              [Reserver]                │
 └────────────────────────────────────────┘
 
 ┌────────────────────────────────────────┐
@@ -111,7 +111,7 @@ Liste des horaires disponibles :
 │ 🚐 Voiture : Confort XYZ               │
 │ 💺 Places disponibles : 12/15          │
 │ 💰 Tarif : 25 000 Ar                   │
-│              [Réserver]                │
+│              [Reserver]                │
 └────────────────────────────────────────┘
 
 ┌────────────────────────────────────────┐
@@ -119,39 +119,39 @@ Liste des horaires disponibles :
 │ 🚐 Voiture : VIP Premium               │
 │ 💺 Places disponibles : 6/8            │
 │ 💰 Tarif : 30 000 Ar                   │
-│              [Réserver]                │
+│              [Reserver]                │
 └────────────────────────────────────────┘
 ```
 
 **Logique d'affichage** :
-1. À partir des voyages filtrés par date (écran 2)
+1. A partir des voyages filtres par date (ecran 2)
 2. Afficher chaque voyage avec :
-   - Heure de départ
+   - Heure de depart
    - Nom et type de voiture
    - Places disponibles
    - Tarif
 3. Trier par heure croissante
-4. Au clic sur [Réserver] :
-   - Stocker le voyage sélectionné
-   - Passer à l'écran 4 (formulaire réservation)
+4. Au clic sur [Reserver] :
+   - Stocker le voyage selectionne
+   - Passer a l'ecran 4 (formulaire reservation)
 
-**Pas d'appel métier** (filtrage JavaScript côté client)
+**Pas d'appel metier** (filtrage JavaScript cote client)
 
 ---
 
-### **Écran 4 : Formulaire réservation**
+### **Ecran 4 : Formulaire reservation**
 
-**Titre** : "Finaliser la réservation"
+**Titre** : "Finaliser la reservation"
 
-**Informations affichées** :
+**Informations affichees** :
 - Trajet : Fasankarana → Ambolomadinika
-- Date : 14/01/2026 à 14h00
+- Date : 14/01/2026 a 14h00
 - Voiture : Confort XYZ
 - Tarif unitaire : 25 000 Ar
 
 **Champs de saisie** :
 - Nom : [_______]
-- Prénom : [_______]
+- Prenom : [_______]
 - Contact : [_______]
 - Nb places : [Liste 1-5]
 
@@ -161,18 +161,18 @@ Liste des horaires disponibles :
 **Boutons** : [Annuler] [Confirmer]
 
 **Logique d'affichage** :
-- Vérifier disponibilité en temps réel
+- Verifier disponibilite en temps reel
 - Limiter nb places selon dispo actuelle
 - Valider tous les champs obligatoires
 
 ---
 
-### **Écran 5 : Confirmation**
+### **Ecran 5 : Confirmation**
 
-**Titre** : "Réservation confirmée !"
+**Titre** : "Reservation confirmee !"
 
 **Informations** :
-- N° réservation : #RES-001234
+- N° reservation : #RES-001234
 - Client : Jean RAKOTO
 - Contact : 032 12 345 67
 - Trajet, date, nb places, montant
@@ -182,7 +182,7 @@ Liste des horaires disponibles :
 
 ---
 
-## 2️⃣ MÉTIER
+## 2️⃣ METIER
 
 ### **Classe : VoyageService**
 
@@ -190,7 +190,7 @@ Liste des horaires disponibles :
 getAllVoyagesDispo() : List<VoyageDetailDTO>
   → Vue : VueVoyageDetaille
   → Vue : VuePlacesDisponibles
-  → Filtrer : statut='prévu' ET places_dispo > 0
+  → Filtrer : statut='prevu' ET places_dispo > 0
   → Retourne TOUS les voyages disponibles
 
 getVoyageById(int id_voyage) : Voyage
@@ -200,7 +200,7 @@ verifierDisponibilite(int id_voyage, int nb_places) : boolean
   → Vue : VuePlacesDisponibles
 ```
 
-**Note** : Les méthodes `rechercherVoyages()` et `calculerPlacesDisponibles()` ne sont plus nécessaires car le filtrage se fait côté client en JavaScript.
+**Note** : Les methodes `rechercherVoyages()` et `calculerPlacesDisponibles()` ne sont plus necessaires car le filtrage se fait cote client en JavaScript.
 
 ---
 
@@ -209,7 +209,7 @@ verifierDisponibilite(int id_voyage, int nb_places) : boolean
 ```java
 creerOuRecupererClient(String nom, String prenom, String contact) : Client
   → Table : Client
-  → Vérifier si existe par contact
+  → Verifier si existe par contact
   → Si non → INSERT nouveau client
 
 getClientByContact(String contact) : Client
@@ -232,7 +232,7 @@ calculerMontantTotal(int id_voyage, int nb_places) : double
 
 annulerReservation(int id_reservation) : void
   → Table : Reservation
-  → UPDATE statut='annulé'
+  → UPDATE statut='annule'
 
 getReservationById(int id_reservation) : Reservation
   → Table : Reservation
@@ -262,9 +262,9 @@ class VoyageDetailDTO {
 
 ---
 
-## 3️⃣ BASE DE DONNÉES
+## 3️⃣ BASE DE DONNEES
 
-### **Tables utilisées**
+### **Tables utilisees**
 1. Voyage
 2. Trajet
 3. GareRoutiere
@@ -274,19 +274,19 @@ class VoyageDetailDTO {
 
 ---
 
-### **Vues à créer**
+### **Vues a creer**
 
 #### **Vue : VueVoyageDetaille**
 
-**Objectif** : Récupérer tous les détails d'un voyage avec infos trajet et gares
+**Objectif** : Recuperer tous les details d'un voyage avec infos trajet et gares
 
-**Tables concernées** :
+**Tables concernees** :
 - Voyage JOIN Trajet (sur id_trajet)
 - JOIN GareRoutiere AS depart (sur id_gare_depart)
 - JOIN GareRoutiere AS arrivee (sur id_gare_arrivee)
 - JOIN Voiture (sur id_voiture)
 
-**Colonnes retournées** :
+**Colonnes retournees** :
 - id_voyage, date_depart, heure_depart, statut, tarif_voyage
 - gare_depart (nom, ville), gare_arrivee (nom, ville)
 - voiture (nom, type, capacite)
@@ -297,10 +297,10 @@ class VoyageDetailDTO {
 
 **Objectif** : Calculer les places disponibles par voyage
 
-**Tables concernées** :
+**Tables concernees** :
 - Voyage JOIN Voiture (sur id_voiture)
 - LEFT JOIN Reservation (sur id_voyage)
-  → WHERE statut != 'annulé'
+  → WHERE statut != 'annule'
 
 **Calcul** :
 ```sql
@@ -308,27 +308,27 @@ places_disponibles = capacite - COALESCE(SUM(nombre_places_reservees), 0)
 GROUP BY id_voyage
 ```
 
-**Colonnes retournées** :
+**Colonnes retournees** :
 - id_voyage
 - capacite
 - places_reservees (somme)
-- places_disponibles (calculé)
+- places_disponibles (calcule)
 
 ---
 
-## 4️⃣ FLUX DE DONNÉES
+## 4️⃣ FLUX DE DONNEES
 
-### **Étape 1 : Chargement initial (Écran 1)**
+### **Etape 1 : Chargement initial (Ecran 1)**
 ```
-Affichage → Métier : getAllVoyagesDispo()
-Métier → BDD : SELECT VueVoyageDetaille + VuePlacesDisponibles
-BDD → Métier → Affichage : List<VoyageDetailDTO> complète
-→ Stocker en mémoire JavaScript
+Affichage → Metier : getAllVoyagesDispo()
+Metier → BDD : SELECT VueVoyageDetaille + VuePlacesDisponibles
+BDD → Metier → Affichage : List<VoyageDetailDTO> complete
+→ Stocker en memoire JavaScript
 ```
 
 ---
 
-### **Étape 2 : Filtrage par gares (Écran 1 → 2)**
+### **Etape 2 : Filtrage par gares (Ecran 1 → 2)**
 ```
 Affichage (JS) : Filtrer par gare_depart + gare_arrivee
 → Pas d'appel serveur
@@ -336,7 +336,7 @@ Affichage (JS) : Filtrer par gare_depart + gare_arrivee
 
 ---
 
-### **Étape 3 : Filtrage par date (Écran 2 → 3)**
+### **Etape 3 : Filtrage par date (Ecran 2 → 3)**
 ```
 Affichage (JS) : Filtrer par date_depart
 → Pas d'appel serveur
@@ -344,36 +344,36 @@ Affichage (JS) : Filtrer par date_depart
 
 ---
 
-### **Étape 4 : Sélection voyage (Écran 3 → 4)**
+### **Etape 4 : Selection voyage (Ecran 3 → 4)**
 ```
-Affichage : Stocker le voyage sélectionné
+Affichage : Stocker le voyage selectionne
 → Afficher formulaire avec infos du voyage
 ```
 
 ---
 
-### **Étape 5 : Confirmation réservation (Écran 4 → 5)**
+### **Etape 5 : Confirmation reservation (Ecran 4 → 5)**
 
-**5.1 - Créer/récupérer client**
+**5.1 - Creer/recuperer client**
 ```
-Affichage → Métier : creerOuRecupererClient(nom, prenom, contact)
-Métier → BDD : SELECT Client (si existe)
+Affichage → Metier : creerOuRecupererClient(nom, prenom, contact)
+Metier → BDD : SELECT Client (si existe)
 Si non → INSERT Client
-BDD → Métier : Retourne id_client
+BDD → Metier : Retourne id_client
 ```
 
-**5.2 - Vérifier disponibilité**
+**5.2 - Verifier disponibilite**
 ```
-Métier : verifierDisponibilite(id_voyage, nb_places)
-Métier → BDD : SELECT VuePlacesDisponibles
-BDD → Métier : Vérification
+Metier : verifierDisponibilite(id_voyage, nb_places)
+Metier → BDD : SELECT VuePlacesDisponibles
+BDD → Metier : Verification
 ```
 
-**5.3 - Créer réservation**
+**5.3 - Creer reservation**
 ```
-Métier : creerReservation(id_client, id_voyage, nb_places, montant)
-Métier → BDD : INSERT Reservation
-BDD → Métier → Affichage : Confirmation + n° réservation
+Metier : creerReservation(id_client, id_voyage, nb_places, montant)
+Metier → BDD : INSERT Reservation
+BDD → Metier → Affichage : Confirmation + n° reservation
 ```
 
 ---
@@ -381,18 +381,18 @@ BDD → Métier → Affichage : Confirmation + n° réservation
 ## ✅ Avantages de cette approche
 
 - **1 seul appel serveur** au chargement initial
-- **Filtrage rapide** côté client (pas de latence réseau)
-- **Expérience fluide** pour l'utilisateur
-- **Moins de charge serveur** (pas de requête à chaque étape)
+- **Filtrage rapide** cote client (pas de latence reseau)
+- **Experience fluide** pour l'utilisateur
+- **Moins de charge serveur** (pas de requete a chaque etape)
 - **Interface progressive** : gares → dates → heures
 
 ---
 
-## 🎯 Concepts objets clés
+## 🎯 Concepts objets cles
 
-- **Séparation des responsabilités** : 1 service par entité
-- **DTO** : Transférer données enrichies entre couches
-- **Vues SQL** : Éviter jointures répétées côté code
-- **Validation métier** : Vérifier disponibilité avant insertion
-- **Filtrage côté client** : Optimisation des performances
-- **Encapsulation** : Services exposent méthodes métier
+- **Separation des responsabilites** : 1 service par entite
+- **DTO** : Transferer donnees enrichies entre couches
+- **Vues SQL** : Eviter jointures repetees cote code
+- **Validation metier** : Verifier disponibilite avant insertion
+- **Filtrage cote client** : Optimisation des performances
+- **Encapsulation** : Services exposent methodes metier

@@ -1,7 +1,7 @@
-# 📘 MCD – Gestion Taxi-Brousse
+﻿# 📘 MCD – Gestion Taxi-Brousse
 
 ## 🏢 GareRoutiere
-**Rôle métier** : Point de départ et d’arrivée des trajets.
+**Role metier** : Point de depart et d’arrivee des trajets.
 
 - id_gare (PK)
 - nom
@@ -12,7 +12,7 @@
 ---
 
 ## 🛣️ Trajet
-**Rôle métier** : Itinéraire fixe et abstrait entre deux gares routières.
+**Role metier** : Itineraire fixe et abstrait entre deux gares routieres.
 
 - id_trajet (PK)
 - id_gare_depart (FK → GareRoutiere)
@@ -21,16 +21,16 @@
 - duree_estimee
 - tarif_defaut
 
-**Règles de gestion** :
-- Un trajet est défini par une gare de départ et une gare d’arrivée
-- Un trajet peut être effectué sur plusieurs jours
-- Un trajet peut être effectué plusieurs fois dans une même journée
-- Un trajet peut donner lieu à plusieurs voyages
+**Regles de gestion** :
+- Un trajet est defini par une gare de depart et une gare d’arrivee
+- Un trajet peut etre effectue sur plusieurs jours
+- Un trajet peut etre effectue plusieurs fois dans une meme journee
+- Un trajet peut donner lieu a plusieurs voyages
 
 ---
 
 ## 🚐 Voiture
-**Rôle métier** : Moyen de transport utilisé pour les voyages.
+**Role metier** : Moyen de transport utilise pour les voyages.
 
 - id_voiture (PK)
 - nom
@@ -40,15 +40,15 @@
 - immatriculation
 - statut (disponible, en_maintenance)
 
-**Règles de gestion** :
-- Chaque voiture possède une capacité fixe
-- Une voiture peut effectuer plusieurs voyages à des moments différents
+**Regles de gestion** :
+- Chaque voiture possede une capacite fixe
+- Une voiture peut effectuer plusieurs voyages a des moments differents
 
 ---
 
 ## 🗓️ Voyage
-**Rôle métier** : Occurrence planifiée d’un trajet  
-(équivalent d’une *session de film* au cinéma).
+**Role metier** : Occurrence planifiee d’un trajet  
+(equivalent d’une *session de film* au cinema).
 
 - id_voyage (PK)
 - id_trajet (FK → Trajet)
@@ -56,17 +56,17 @@
 - heure_depart
 - id_voiture (FK → Voiture)
 - tarif_voyage (nullable)
-- statut (prévu, en_cours, terminé, annulé)
+- statut (prevu, en_cours, termine, annule)
 
-**Règles de gestion** :
-- Un voyage correspond à un trajet à une date et une heure données
-- Un voyage est effectué par une seule voiture
+**Regles de gestion** :
+- Un voyage correspond a un trajet a une date et une heure donnees
+- Un voyage est effectue par une seule voiture
 - Un trajet peut avoir plusieurs voyages
 
 ---
 
 ## 🧍 Client
-**Rôle métier** : Passager effectuant des réservations.
+**Role metier** : Passager effectuant des reservations.
 
 - id_client (PK)
 - nom
@@ -76,7 +76,7 @@
 ---
 
 ## 🎟️ Reservation
-**Rôle métier** : Réservation de places par un client pour un voyage.
+**Role metier** : Reservation de places par un client pour un voyage.
 
 - id_reservation (PK)
 - id_client (FK → Client)
@@ -84,17 +84,17 @@
 - nombre_places_reservees
 - date_reservation
 - montant_total
-- statut (en_attente_paiement, confirmé, annulé)
+- statut (en_attente_paiement, confirme, annule)
 
-**Règles de gestion** :
-- Un client peut effectuer plusieurs réservations
-- Une réservation concerne un seul voyage
-- Le nombre de places réservées ne peut pas dépasser la capacité du voyage
+**Regles de gestion** :
+- Un client peut effectuer plusieurs reservations
+- Une reservation concerne un seul voyage
+- Le nombre de places reservees ne peut pas depasser la capacite du voyage
 
 ---
 
 ## 💰 Paiement
-**Rôle métier** : Encaissement lié à une réservation.
+**Role metier** : Encaissement lie a une reservation.
 
 - id_paiement (PK)
 - id_reservation (FK → Reservation)
@@ -103,18 +103,19 @@
 - date_paiement
 - reference_transaction
 
-**Règles de gestion** :
-- Une réservation peut donner lieu à un ou plusieurs paiements
-- Le chiffre d’affaires est calculé à partir des paiements
+**Regles de gestion** :
+- Une reservation peut donner lieu a un ou plusieurs paiements
+- Le chiffre d’affaires est calcule a partir des paiements
 
 ---
 
-## 🔗 Cardinalités principales
+## 🔗 Cardinalites principales
 
-- GareRoutiere (1) —— (N) Trajet (départ)
-- GareRoutiere (1) —— (N) Trajet (arrivée)
+- GareRoutiere (1) —— (N) Trajet (depart)
+- GareRoutiere (1) —— (N) Trajet (arrivee)
 - Trajet (1) —— (N) Voyage
 - Voiture (1) —— (N) Voyage
 - Voyage (1) —— (N) Reservation
 - Client (1) —— (N) Reservation
 - Reservation (1) —— (N) Paiement
+

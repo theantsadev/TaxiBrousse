@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Réservation confirmée - Taxi Brousse</title>
+    <title>Reservation confirmee - Taxi Brousse</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -74,8 +74,8 @@
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <h1 class="h3 mb-2">Réservation confirmée!</h1>
-            <p class="text-muted">Votre place est réservée</p>
+            <h1 class="h3 mb-2">Reservation confirmee!</h1>
+            <p class="text-muted">Votre place est reservee</p>
         </div>
 
         <div class="confirmation-number">
@@ -83,7 +83,7 @@
         </div>
 
         <div class="mb-4">
-            <h5 class="mb-3">Détails de la réservation</h5>
+            <h5 class="mb-3">Details de la reservation</h5>
             
             <div class="info-row">
                 <span class="info-label">Client</span>
@@ -101,9 +101,9 @@
             </div>
             
             <div class="info-row">
-                <span class="info-label">Départ</span>
+                <span class="info-label">Depart</span>
                 <span class="info-value">
-                    <span th:text="${#temporals.format(voyage.date_depart, 'dd/MM/yyyy')} + ' à ' + ${#temporals.format(voyage.heure_depart, 'HH:mm')}"/>
+                    <span th:text="${#temporals.format(voyage.date_depart, 'dd/MM/yyyy')} + ' a ' + ${#temporals.format(voyage.heure_depart, 'HH:mm')}"/>
                 </span>
             </div>
             
@@ -125,24 +125,25 @@
 
         <form method="POST" action="/app/reservation/payer">
             <input type="hidden" name="id_reservation" th:value="${reservation.id_reservation}">
-            <input type="hidden" name="mode_paiement" value="Espèces">
+            <input type="hidden" name="mode_paiement" value="Especes">
             
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-success btn-lg">
                     <i class="fas fa-credit-card"></i> Effectuer le paiement
                 </button>
                 <a href="/app/reservation" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left"></i> Nouvelle réservation
+                    <i class="fas fa-arrow-left"></i> Nouvelle reservation
                 </a>
             </div>
         </form>
 
         <div class="alert alert-info mt-4" role="alert">
             <i class="fas fa-info-circle"></i>
-            <strong>À retenir:</strong> Votre réservation est en attente de paiement. Veuillez finaliser le paiement pour confirmer définitivement votre voyage.
+            <strong>A retenir:</strong> Votre reservation est en attente de paiement. Veuillez finaliser le paiement pour confirmer definitivement votre voyage.
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

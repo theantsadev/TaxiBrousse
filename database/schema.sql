@@ -1,4 +1,4 @@
--- Suppression des tables si elles existent
+﻿-- Suppression des tables si elles existent
 DROP TABLE IF EXISTS paiement CASCADE;
 DROP TABLE IF EXISTS reservation CASCADE;
 DROP TABLE IF EXISTS voyage CASCADE;
@@ -77,7 +77,7 @@ CREATE TABLE paiement (
     reference_transaction VARCHAR(100)
 );
 
--- Vues pour les requêtes frequentes
+-- Vues pour les requetes frequentes
 CREATE VIEW vue_voyage_detaille AS
 SELECT 
     v.id_voyage,
@@ -108,3 +108,4 @@ FROM voyage v
 JOIN voiture vo ON v.id_voiture = vo.id_voiture
 LEFT JOIN reservation r ON r.id_voyage = v.id_voyage
 GROUP BY v.id_voyage, vo.capacite;
+
