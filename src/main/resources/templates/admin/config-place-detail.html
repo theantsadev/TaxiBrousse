@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configuration Places - Taxi Brousse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653a8a 100%);
+        }
+
+        .voyage-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .config-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .config-card:hover {
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .price-input {
+            font-size: 1.1rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-cogs"></i> Configuration Places</h1>
+                    <p class="mb-0">Voyage #<span th:text="${voyage.id_voyage}"></span></p>
+                </div>
+                <a href="/app/admin/config-places" class="btn btn-light">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Messages -->
+        <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> <span th:text="${message}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${erreur}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> <span th:text="${erreur}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Infos du voyage -->
+        <div class="voyage-info">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="mb-3">
+                        <i class="fas fa-bus"></i>
+                        <span th:text="${voyage.trajet.gare_depart.nom} + ' → ' + ${voyage.trajet.gare_arrivee.nom}"></span>
+                    </h5>
+                    <p class="mb-1">
+                        <i class="fas fa-calendar"></i>
+                        <span th:text="${#temporals.format(voyage.date_depart, 'dd MMMM yyyy')}"></span>
+                        <span class="ms-3">
+                            <i class="fas fa-clock"></i>
+                            <span th:text="${#temporals.format(voyage.heure_depart, 'HH:mm')}"></span>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box">
+                        <small class="text-muted">Capacite du vehicule</small>
+                        <h3 th:text="${voyage.voiture.capacite}">0</h3>
+                        <small th:text="${voyage.voiture.nom}"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de creation -->
+        <div class="form-section">
+            <h5 class="mb-4"><i class="fas fa-plus-circle"></i> Ajouter une Configuration</h5>
+            <form method="POST" action="/app/admin/config-places/creer">
+                <input type="hidden" name="id_voyage" th:value="${voyage.id_voyage}">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="id_type_place" class="form-label">Type de Place *</label>
+                            <select class="form-select" id="id_type_place" name="id_type_place" required>
+                                <option value="">-- Selectionnez --</option>
+                                <option th:each="type : ${availableTypes}" th:value="${type.id_type_place}" th:text="${type.nom}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre *</label>
+                            <input type="number" class="form-control" id="nombre" name="nombre" min="1" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="prix" class="form-label">Prix Unitaire (Ar) *</label>
+                            <input type="number" class="form-control price-input" id="prix" name="prix" min="0" step="100" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus"></i> Ajouter Configuration
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Liste des configurations -->
+        <h5 class="mb-3"><i class="fas fa-list"></i> Configurations Actuelles</h5>
+
+        <div th:if="${#lists.isEmpty(configs)}" class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Aucune configuration pour ce voyage. Creez une configuration ci-dessus.
+        </div>
+
+        <div th:each="config : ${configs}" class="config-card">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <strong th:text="${config.typePlace.nom}"></strong>
+                    <br>
+                    <small class="text-muted">Type: <span th:text="${config.typePlace.id_type_place}"></span></small>
+                </div>
+                <div class="col-md-2">
+                    <div class="stat-box mb-0">
+                        <small class="text-muted">Places</small>
+                        <h5 th:text="${config.nombre}">0</h5>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-box mb-0">
+                        <small class="text-muted">Prix Unitaire</small>
+                        <h5><span th:text="${#numbers.formatInteger(config.prix, 0)}"></span> Ar</h5>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="stat-box mb-0">
+                        <small class="text-muted">Total</small>
+                        <h5><span th:text="${#numbers.formatInteger(config.nombre * config.prix, 0)}"></span> Ar</h5>
+                    </div>
+                </div>
+                <div class="col-md-2 text-end">
+                    <button type="button" class="btn btn-sm btn-warning me-2" data-bs-toggle="modal" th:data-bs-target="'#editModal' + ${config.id_config}">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <a th:href="@{/admin/config-places/supprimer/{id}(id=${config.id_config})}" class="btn btn-sm btn-danger" onclick="return confirm('Etes-vous sur?')">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </a>
+                </div>
+            </div>
+
+            <!-- Modal Modification -->
+            <div class="modal fade" th:id="'editModal' + ${config.id_config}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier Configuration</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form method="POST" th:action="@{/admin/config-places/modifier/{id}(id=${config.id_config})}">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nombre_edit" class="form-label">Nombre de Places</label>
+                                    <input type="number" class="form-control" id="nombre_edit" name="nombre" th:value="${config.nombre}" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prix_edit" class="form-label">Prix Unitaire (Ar)</label>
+                                    <input type="number" class="form-control price-input" id="prix_edit" name="prix" th:value="${config.prix}" min="0" step="100" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Sauvegarder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume capacites -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <i class="fas fa-chart-bar"></i> Resume des Places
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h5 class="text-primary">
+                                <span th:text="${configs.size()}">0</span>
+                            </h5>
+                            <p class="mb-0">Types Configures</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h5 class="text-success">
+                                <span th:text="${totalPlaces}">0</span>
+                            </h5>
+                            <p class="mb-0">Places Totales</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h5 th:classappend="${totalPlaces > voyage.voiture.capacite ? 'text-danger' : 'text-info'}">
+                                <span th:text="${remainingPlaces}">0</span>
+                            </h5>
+                            <p class="mb-0">Places Restantes</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h5 class="text-warning">
+                                <span th:text="${#numbers.formatInteger(recetteMaxTheorique, 0)}">0</span> Ar
+                            </h5>
+                            <p class="mb-0">Recette Max Theorique</p>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${totalPlaces > voyage.voiture.capacite}" class="alert alert-danger mt-3 mb-0">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    Le total des places depasse la capacite du vehicule!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -18,6 +18,10 @@ public class Reservation {
     @JoinColumn(name = "id_voyage", nullable = false)
     private Voyage voyage;
 
+    @ManyToOne
+    @JoinColumn(name = "id_type_place", nullable = true)
+    private TypePlace typePlace;
+
     private int nombre_places_reservees;
     private LocalDate date_reservation;
     private double montant_total;
@@ -25,9 +29,10 @@ public class Reservation {
 
     public Reservation() {}
 
-    public Reservation(Client client, Voyage voyage, int nombre_places_reservees, LocalDate date_reservation, double montant_total, String statut) {
+    public Reservation(Client client, Voyage voyage, TypePlace typePlace, int nombre_places_reservees, LocalDate date_reservation, double montant_total, String statut) {
         this.client = client;
         this.voyage = voyage;
+        this.typePlace = typePlace;
         this.nombre_places_reservees = nombre_places_reservees;
         this.date_reservation = date_reservation;
         this.montant_total = montant_total;
@@ -56,6 +61,14 @@ public class Reservation {
 
     public void setVoyage(Voyage voyage) {
         this.voyage = voyage;
+    }
+
+    public TypePlace getTypePlace() {
+        return typePlace;
+    }
+
+    public void setTypePlace(TypePlace typePlace) {
+        this.typePlace = typePlace;
     }
 
     public int getNombre_places_reservees() {

@@ -1,5 +1,11 @@
 -- Insertion des donnees de test
 
+-- Types de places
+INSERT INTO type_place (nom) VALUES
+('Premium'),
+('Standard'),
+('Economique');
+
 -- Gares routieres
 INSERT INTO gare_routiere (nom, ville, adresse, telephone) VALUES
 ('Gare Centrale Fasankarana', 'Fasankarana', '123 Rue Principale', '032 12 34 56'),
