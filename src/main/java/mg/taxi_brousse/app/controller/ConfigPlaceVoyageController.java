@@ -33,7 +33,7 @@ public class ConfigPlaceVoyageController {
         model.addAttribute("voyages", voyages);
         model.addAttribute("pageTitle", "Configuration Places");
         model.addAttribute("activeMenu", "config");
-        return "admin/config-places-layout";
+        return "admin/config-places";
     }
 
     @GetMapping("/voyage/{id}")
@@ -66,7 +66,7 @@ public class ConfigPlaceVoyageController {
                 .filter(t -> !usedTypes.contains(t.getId_type_place()))
                 .collect(Collectors.toList()));
 
-        return "admin/config-place-detail-layout";
+        return "admin/config-place-detail";
     }
 
     @PostMapping("/creer")

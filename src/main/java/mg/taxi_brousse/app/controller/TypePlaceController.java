@@ -1,9 +1,7 @@
 package mg.taxi_brousse.app.controller;
 
 import mg.taxi_brousse.app.model.TypePlace;
-import mg.taxi_brousse.app.model.ConfigPlaceVoyage;
 import mg.taxi_brousse.app.service.TypePlaceService;
-import mg.taxi_brousse.app.service.ConfigPlaceVoyageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +23,7 @@ public class TypePlaceController {
         model.addAttribute("types", types);
         model.addAttribute("pageTitle", "Types de Places");
         model.addAttribute("activeMenu", "types");
-        return "admin/types-places-layout";
+        return "admin/types-places";
     }
 
     @PostMapping("/creer")
