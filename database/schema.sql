@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS trajet CASCADE;
 DROP TABLE IF EXISTS client CASCADE;
 DROP TABLE IF EXISTS gare_routiere CASCADE;
 
+
 -- Table GareRoutiere
 CREATE TABLE gare_routiere (
     id_gare SERIAL PRIMARY KEY,
@@ -58,6 +59,22 @@ CREATE TABLE client (
     contact VARCHAR(50) UNIQUE NOT NULL
 );
 
+-- Table TypePlace (types de places: premium, standard, economique, etc.)
+CREATE TABLE type_place (
+    id_type_place SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Table ConfigPlaceVoyage (configuration des types de places pour chaque voyage)
+CREATE TABLE config_place_voyage (
+    id_config SERIAL PRIMARY KEY,
+    id_voyage INTEGER NOT NULL REFERENCES voyage(id_voyage),
+    id_type_place INTEGER NOT NULL REFERENCES type_place(id_type_place),
+    nombre INTEGER NOT NULL,
+    prix DOUBLE PRECISION NOT NULL,
+    UNIQUE(id_voyage, id_type_place)
+);
+
 -- Table Reservation
 CREATE TABLE reservation (
     id_reservation SERIAL PRIMARY KEY,
@@ -80,21 +97,7 @@ CREATE TABLE paiement (
     reference_transaction VARCHAR(100)
 );
 
--- Table TypePlace (types de places: premium, standard, economique, etc.)
-CREATE TABLE type_place (
-    id_type_place SERIAL PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL UNIQUE
-);
 
--- Table ConfigPlaceVoyage (configuration des types de places pour chaque voyage)
-CREATE TABLE config_place_voyage (
-    id_config SERIAL PRIMARY KEY,
-    id_voyage INTEGER NOT NULL REFERENCES voyage(id_voyage),
-    id_type_place INTEGER NOT NULL REFERENCES type_place(id_type_place),
-    nombre INTEGER NOT NULL,
-    prix DOUBLE PRECISION NOT NULL,
-    UNIQUE(id_voyage, id_type_place)
-);
 
 -- Vues pour les requetes frequentes
 CREATE VIEW vue_voyage_detaille AS

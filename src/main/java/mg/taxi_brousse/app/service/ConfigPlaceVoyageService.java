@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class ConfigPlaceVoyageService {
-    
+
     @Autowired
     private ConfigPlaceVoyageRepository configPlaceVoyageRepository;
 
@@ -21,11 +21,22 @@ public class ConfigPlaceVoyageService {
     }
 
     public List<ConfigPlaceVoyage> getConfigsByVoyage(int idVoyage) {
-        return configPlaceVoyageRepository.findByVoyage_Id_voyage(idVoyage);
+        return configPlaceVoyageRepository.findByVoyageIdVoyage(idVoyage);
+    }
+
+    public Double getRecetteMaxTheorique(int idVoyage) {
+        List<ConfigPlaceVoyage> configs = getConfigsByVoyage(idVoyage);
+        return getRecetteMaxTheorique(configs);
+    }
+
+    public Double getRecetteMaxTheorique(List<ConfigPlaceVoyage> configs) {
+        return configs.stream()
+                .mapToDouble(c -> c.getNombre() * c.getPrix())
+                .sum();
     }
 
     public Optional<ConfigPlaceVoyage> getConfigByVoyageAndType(int idVoyage, int idTypePlace) {
-        return configPlaceVoyageRepository.findByVoyage_Id_voyageAndTypePlace_Id_type_place(idVoyage, idTypePlace);
+        return configPlaceVoyageRepository.findByVoyageIdVoyageAndTypePlaceIdTypePlace(idVoyage, idTypePlace);
     }
 
     public void updateConfig(int id, int nombre, double prix) {

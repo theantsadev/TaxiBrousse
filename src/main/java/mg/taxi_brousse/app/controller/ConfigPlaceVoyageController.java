@@ -3,7 +3,6 @@ package mg.taxi_brousse.app.controller;
 import mg.taxi_brousse.app.model.ConfigPlaceVoyage;
 import mg.taxi_brousse.app.model.Voyage;
 import mg.taxi_brousse.app.model.TypePlace;
-import mg.taxi_brousse.app.dto.ConfigPlaceDTO;
 import mg.taxi_brousse.app.service.ConfigPlaceVoyageService;
 import mg.taxi_brousse.app.service.VoyageService;
 import mg.taxi_brousse.app.service.TypePlaceService;
@@ -32,7 +31,9 @@ public class ConfigPlaceVoyageController {
     public String listConfigs(Model model) {
         List<Voyage> voyages = voyageService.getAllVoyages();
         model.addAttribute("voyages", voyages);
-        return "admin/config-places";
+        model.addAttribute("pageTitle", "Configuration Places");
+        model.addAttribute("activeMenu", "config");
+        return "admin/config-places-layout";
     }
 
     @GetMapping("/voyage/{id}")
@@ -48,13 +49,24 @@ public class ConfigPlaceVoyageController {
                 .map(c -> c.getTypePlace().getId_type_place())
                 .collect(Collectors.toList());
 
+        // Calculate total places
+        int totalPlaces = configs.stream()
+                .mapToInt(ConfigPlaceVoyage::getNombre)
+                .sum();
+        int remainingPlaces = voyage.get().getVoiture().getCapacite() - totalPlaces;
+
         model.addAttribute("voyage", voyage.get());
         model.addAttribute("configs", configs);
+        model.addAttribute("recetteMaxTheorique", configPlaceVoyageService.getRecetteMaxTheorique(configs));
+        model.addAttribute("totalPlaces", totalPlaces);
+        model.addAttribute("remainingPlaces", remainingPlaces);
+        model.addAttribute("pageTitle", "Configuration Voyage");
+        model.addAttribute("activeMenu", "config");
         model.addAttribute("availableTypes", allTypes.stream()
                 .filter(t -> !usedTypes.contains(t.getId_type_place()))
                 .collect(Collectors.toList()));
 
-        return "admin/config-place-detail";
+        return "admin/config-place-detail-layout";
     }
 
     @PostMapping("/creer")

@@ -17,14 +17,15 @@ public class TypePlaceController {
     @Autowired
     private TypePlaceService typePlaceService;
 
-    @Autowired
-    private ConfigPlaceVoyageService configPlaceVoyageService;
+   
 
     @GetMapping
     public String listTypes(Model model) {
         List<TypePlace> types = typePlaceService.getTousLesTypes();
         model.addAttribute("types", types);
-        return "admin/types-places";
+        model.addAttribute("pageTitle", "Types de Places");
+        model.addAttribute("activeMenu", "types");
+        return "admin/types-places-layout";
     }
 
     @PostMapping("/creer")

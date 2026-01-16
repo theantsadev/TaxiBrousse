@@ -99,7 +99,7 @@
                     <h1><i class="fas fa-cogs"></i> Configuration Places</h1>
                     <p class="mb-0">Voyage #<span th:text="${voyage.id_voyage}"></span></p>
                 </div>
-                <a href="/admin/config-places" class="btn btn-light">
+                <a href="/app/admin/config-places" class="btn btn-light">
                     <i class="fas fa-arrow-left"></i> Retour
                 </a>
             </div>
@@ -148,7 +148,7 @@
         <!-- Formulaire de creation -->
         <div class="form-section">
             <h5 class="mb-4"><i class="fas fa-plus-circle"></i> Ajouter une Configuration</h5>
-            <form method="POST" action="/admin/config-places/creer">
+            <form method="POST" action="/app/admin/config-places/creer">
                 <input type="hidden" name="id_voyage" th:value="${voyage.id_voyage}">
                 <div class="row">
                     <div class="col-md-3">
@@ -261,7 +261,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="text-center">
                             <h5 class="text-primary">
                                 <span th:text="${configs.size()}">0</span>
@@ -269,24 +269,32 @@
                             <p class="mb-0">Types Configures</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="text-center">
                             <h5 class="text-success">
-                                <span th:text="${#lists.isEmpty(configs) ? 0 : #aggregate.sum(configs.![nombre])}">0</span>
+                                <span th:text="${totalPlaces}">0</span>
                             </h5>
                             <p class="mb-0">Places Totales</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="text-center">
-                            <h5 th:classappend="${#lists.isEmpty(configs) ? 'text-danger' : (#aggregate.sum(configs.![nombre]) > voyage.voiture.capacite ? 'text-danger' : 'text-info')}">
-                                <span th:text="${voyage.voiture.capacite - (#lists.isEmpty(configs) ? 0 : #aggregate.sum(configs.![nombre]))}">0</span>
+                            <h5 th:classappend="${totalPlaces > voyage.voiture.capacite ? 'text-danger' : 'text-info'}">
+                                <span th:text="${remainingPlaces}">0</span>
                             </h5>
                             <p class="mb-0">Places Restantes</p>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h5 class="text-warning">
+                                <span th:text="${#numbers.formatInteger(recetteMaxTheorique, 0)}">0</span> Ar
+                            </h5>
+                            <p class="mb-0">Recette Max Theorique</p>
+                        </div>
+                    </div>
                 </div>
-                <div th:if="${!#lists.isEmpty(configs) && #aggregate.sum(configs.![nombre]) > voyage.voiture.capacite}" class="alert alert-danger mt-3 mb-0">
+                <div th:if="${totalPlaces > voyage.voiture.capacite}" class="alert alert-danger mt-3 mb-0">
                     <i class="fas fa-exclamation-triangle"></i> 
                     Le total des places depasse la capacite du vehicule!
                 </div>
