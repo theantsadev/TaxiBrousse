@@ -75,12 +75,39 @@
 
 ---
 
+## 🎟️ TypePlace
+**Role metier** : Classification des types de places (Premium, Standard, Economique).
+
+- id_type_place (PK)
+- nom (UNIQUE)
+
+**Exemple**: Premium, Standard, Economique
+
+---
+
+## 📋 ConfigPlaceVoyage
+**Role metier** : Configuration des types de places disponibles pour chaque voyage avec prix specifique.
+
+- id_config (PK)
+- id_voyage (FK -> Voyage)
+- id_type_place (FK -> TypePlace)
+- nombre (nombre de places de ce type)
+- prix (prix unitaire pour ce type de place)
+
+**Regles de gestion**:
+- Chaque voyage peut avoir plusieurs types de places
+- Un type de place peut avoir differents prix selon le voyage
+- Un voyage ne peut avoir qu'une configuration par type de place (UNIQUE)
+
+---
+
 ## 🎟️ Reservation
 **Role metier** : Reservation de places par un client pour un voyage.
 
 - id_reservation (PK)
 - id_client (FK → Client)
 - id_voyage (FK → Voyage)
+- id_type_place (FK → TypePlace, nullable)
 - nombre_places_reservees
 - date_reservation
 - montant_total
@@ -89,7 +116,8 @@
 **Regles de gestion** :
 - Un client peut effectuer plusieurs reservations
 - Une reservation concerne un seul voyage
-- Le nombre de places reservees ne peut pas depasser la capacite du voyage
+- Une reservation peut specifier un type de place
+- Le nombre de places reservees ne peut pas depasser les places disponibles du type
 
 ---
 
@@ -115,7 +143,8 @@
 - GareRoutiere (1) —— (N) Trajet (arrivee)
 - Trajet (1) —— (N) Voyage
 - Voiture (1) —— (N) Voyage
-- Voyage (1) —— (N) Reservation
-- Client (1) —— (N) Reservation
+- Voyage (1) —— (N) Reservation- Voyage (1) —— (N) ConfigPlaceVoyage
+- TypePlace (1) —— (N) ConfigPlaceVoyage
+- TypePlace (1) —— (N) Reservation- Client (1) —— (N) Reservation
 - Reservation (1) —— (N) Paiement
 

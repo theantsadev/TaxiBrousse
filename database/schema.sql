@@ -1,6 +1,8 @@
 ﻿-- Suppression des tables si elles existent
 DROP TABLE IF EXISTS paiement CASCADE;
 DROP TABLE IF EXISTS reservation CASCADE;
+DROP TABLE IF EXISTS config_place_voyage CASCADE;
+DROP TABLE IF EXISTS type_place CASCADE;
 DROP TABLE IF EXISTS voyage CASCADE;
 DROP TABLE IF EXISTS voiture CASCADE;
 DROP TABLE IF EXISTS trajet CASCADE;
@@ -61,6 +63,7 @@ CREATE TABLE reservation (
     id_reservation SERIAL PRIMARY KEY,
     id_client INTEGER NOT NULL REFERENCES client(id_client),
     id_voyage INTEGER NOT NULL REFERENCES voyage(id_voyage),
+    id_type_place INTEGER REFERENCES type_place(id_type_place),
     nombre_places_reservees INTEGER NOT NULL,
     date_reservation DATE NOT NULL,
     montant_total DOUBLE PRECISION NOT NULL,
@@ -75,6 +78,22 @@ CREATE TABLE paiement (
     mode_paiement VARCHAR(50),
     date_paiement DATE,
     reference_transaction VARCHAR(100)
+);
+
+-- Table TypePlace (types de places: premium, standard, economique, etc.)
+CREATE TABLE type_place (
+    id_type_place SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Table ConfigPlaceVoyage (configuration des types de places pour chaque voyage)
+CREATE TABLE config_place_voyage (
+    id_config SERIAL PRIMARY KEY,
+    id_voyage INTEGER NOT NULL REFERENCES voyage(id_voyage),
+    id_type_place INTEGER NOT NULL REFERENCES type_place(id_type_place),
+    nombre INTEGER NOT NULL,
+    prix DOUBLE PRECISION NOT NULL,
+    UNIQUE(id_voyage, id_type_place)
 );
 
 -- Vues pour les requetes frequentes

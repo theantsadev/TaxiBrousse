@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tableau de Bord Admin - Taxi Brousse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .admin-card h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .admin-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .container-admin {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .feature-list {
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .feature-list li {
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-admin">
+        <div class="page-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Tableau de Bord Admin</h1>
+            <p>Gestion de Taxi-Brousse</p>
+        </div>
+
+        <div class="row">
+            <!-- Types de Places -->
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h4>Types de Places</h4>
+                    <p>Creez et gerez les differents types de places (Premium, Standard, Economique)</p>
+                    <ul class="feature-list">
+                        <li>Creer des types de places</li>
+                        <li>Gerer les categories</li>
+                        <li>Voir les configurations</li>
+                    </ul>
+                    <a href="/admin/types-places" class="btn btn-admin text-white">
+                        <i class="fas fa-arrow-right"></i> Acceder
+                    </a>
+                </div>
+            </div>
+
+            <!-- Configuration Places -->
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>Configuration Places</h4>
+                    <p>Configurez le nombre et le prix de chaque type de place par voyage</p>
+                    <ul class="feature-list">
+                        <li>Ajouter des configurations</li>
+                        <li>Modifier les prix</li>
+                        <li>Gerer les stocks</li>
+                    </ul>
+                    <a href="/admin/config-places" class="btn btn-admin text-white">
+                        <i class="fas fa-arrow-right"></i> Acceder
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Retour a l'accueil -->
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4>Accueil</h4>
+                    <p>Retour a la page d'accueil de Taxi-Brousse</p>
+                    <a href="/" class="btn btn-admin text-white">
+                        <i class="fas fa-arrow-right"></i> Acceder
+                    </a>
+                </div>
+            </div>
+
+            <!-- Reservations -->
+            <div class="col-md-6">
+                <div class="admin-card">
+                    <div class="admin-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h4>Reservations</h4>
+                    <p>Consultez et gerez les reservations des clients</p>
+                    <a href="/reservation/list" class="btn btn-admin text-white">
+                        <i class="fas fa-arrow-right"></i> Acceder
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guide d'utilisation -->
+        <div class="card mt-5" style="background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);">
+            <div class="card-body p-4">
+                <h5 class="mb-3"><i class="fas fa-book"></i> Guide d'utilisation</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Gestion des Types de Places</h6>
+                        <ol class="small" style="color: #666;">
+                            <li>Allez dans "Types de Places"</li>
+                            <li>Creez les types (Premium, Standard, Economique)</li>
+                            <li>Chaque type peut avoir un prix different selon le voyage</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Configuration par Voyage</h6>
+                        <ol class="small" style="color: #666;">
+                            <li>Allez dans "Configuration Places"</li>
+                            <li>Selectionnez un voyage</li>
+                            <li>Ajoutez les types de places avec nombre et prix</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; color: white; margin-top: 50px; margin-bottom: 20px;">
+            <p><small>Taxi-Brousse © 2026 - Gestion Intelligente de Reservations</small></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

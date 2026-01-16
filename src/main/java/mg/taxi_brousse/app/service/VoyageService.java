@@ -22,6 +22,10 @@ public class VoyageService {
         return voyageRepository.findAllVoyagesDispo();
     }
 
+    public List<Voyage> getAllVoyages() {
+        return voyageRepository.findAll();
+    }
+
     public Optional<Voyage> getVoyageById(int id_voyage) {
         return voyageRepository.findById(id_voyage);
     }
